@@ -11,13 +11,13 @@ DISTINCT
 (GROUP_CONCAT(distinct ?work;separator="|") as ?cellarURIs)
 (GROUP_CONCAT(distinct ?title;separator="|") as ?workTitles)
 (GROUP_CONCAT(distinct ?langIdentifier;separator="|") as ?lang)
-(GROUP_CONCAT(distinct ?mtype;separator="|") as ?mtypes)
+?mtype
 (GROUP_CONCAT(distinct ?resType;separator="|") as ?workTypes)
-(GROUP_CONCAT(distinct ?date;separator="|") as ?workDates)
+?date
 (GROUP_CONCAT(distinct ?agentName;separator="|") as ?authors)
-(GROUP_CONCAT(distinct ?subjectLabel;separator="|") as ?subjects)
+(GROUP_CONCAT(?subjectLabel;separator="|") as ?subjects)
 (GROUP_CONCAT(distinct ?subject;separator="|") as ?subject_ids)
-(GROUP_CONCAT(distinct ?workId;separator="|") as ?workIds)
+?workId
 (GROUP_CONCAT(distinct ?celex;separator="|") as ?celexIds)
 
 WHERE 
@@ -305,8 +305,11 @@ WHERE
            {?work cdm:work_created_by_agent ?agent }
            union
            {?work cdm:work_authored_by_agent ?agent }
-       }       graph ?gaa { ?agent skos:prefLabel ?agentName
-                       filter (lang(?agentName)="en") .                  }.
+       }
+
+   graph ?gaa { ?agent skos:prefLabel ?agentName
+                       filter (lang(?agentName)="en") .
+       }
 
 	graph ?gm {
 		?manif cdm:manifestation_manifests_expression ?exp .
